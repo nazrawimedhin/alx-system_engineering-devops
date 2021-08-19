@@ -1,2 +1,2 @@
 #!/bin/bash
-ln -lan
+ls -lan
