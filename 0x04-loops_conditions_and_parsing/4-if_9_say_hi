@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# This script is displaying "Best School" 10 times, and in the 9th iteration prints "HI"
+
+a=0
+while [ a -lt 10];
+    do
+        echo "Best School"
+        if [ a==10 ]
+        then
+            echo "HI"
+    done;
