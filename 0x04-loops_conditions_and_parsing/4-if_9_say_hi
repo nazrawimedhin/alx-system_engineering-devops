@@ -8,4 +8,5 @@ while [ a -lt 10];
         if [ a==10 ]
         then
             echo "HI"
+        fi
     done;
