@@ -4,6 +4,8 @@
 
 * At the end of this project, you are expected to be able to explain to anyone, without the help of Google:
 
+### General
+
 * Computers and software rarely work the way we want **(that’s the “fun” part of the job!)**. And being able to debug a webstack is essential for a **Full-Stack Software Engineer**, and it takes practice to be a master of it.
 
 ## Requirements
