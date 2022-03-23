@@ -18,10 +18,10 @@
 
 ## DNS Record Types
 
-A
-CNAME
-TXT
-MX
+* A
+* CNAME
+* TXT
+* MX
 
 ## Requirements
 
