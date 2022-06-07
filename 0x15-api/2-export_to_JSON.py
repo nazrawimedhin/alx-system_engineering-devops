@@ -1,30 +1,29 @@
 #!/usr/bin/python3
-""" Script that uses JSONPlaceholder API to get information about employee """
-import json
-import requests
-import sys
-
+"""Exports data in the JSON format"""
 
 if __name__ == "__main__":
-    url = 'https://jsonplaceholder.typicode.com/'
 
-    userid = sys.argv[1]
-    user = '{}users/{}'.format(url, userid)
-    res = requests.get(user)
-    json_o = res.json()
-    name = json_o.get('username')
+    import json
+    import requests
+    import sys
 
-    todos = '{}todos?userId={}'.format(url, userid)
-    res = requests.get(todos)
-    tasks = res.json()
-    l_task = []
-    for task in tasks:
-        dict_task = {"task": task.get('title'),
-                     "completed": task.get('completed'),
-                     "username": name}
-        l_task.append(dict_task)
+    userId = sys.argv[1]
+    user = requests.get("https://jsonplaceholder.typicode.com/users/{}"
+                        .format(userId))
+    todos = requests.get('https://jsonplaceholder.typicode.com/todos')
+    todos = todos.json()
 
-    d_task = {str(userid): l_task}
-    filename = '{}.json'.format(userid)
+    todoUser = {}
+    taskList = []
+
+    for task in todos:
+        if task.get('userId') == int(userId):
+            taskDict = {"task": task.get('title'),
+                        "completed": task.get('completed'),
+                        "username": user.json().get('username')}
+            taskList.append(taskDict)
+    todoUser[userId] = taskList
+
+    filename = userId + '.json'
     with open(filename, mode='w') as f:
-        json.dump(d_task, f)
+        json.dump(todoUser, f)

@@ -1,34 +1,23 @@
 #!/usr/bin/python3
-""" Script that uses JSONPlaceholder API to get information about employee """
-import csv
-import requests
-import sys
-
+"""Exports data in the CSV format"""
 
 if __name__ == "__main__":
-    url = 'https://jsonplaceholder.typicode.com/'
 
-    userid = sys.argv[1]
-    user = '{}users/{}'.format(url, userid)
-    res = requests.get(user)
-    json_o = res.json()
-    name = json_o.get('username')
+    import csv
+    import requests
+    import sys
 
-    todos = '{}todos?userId={}'.format(url, userid)
-    res = requests.get(todos)
-    tasks = res.json()
-    l_task = []
-    for task in tasks:
-        l_task.append([userid,
-                       name,
-                       task.get('completed'),
-                       task.get('title')])
+    userId = sys.argv[1]
+    user = requests.get("https://jsonplaceholder.typicode.com/users/{}"
+                        .format(userId))
+    name = user.json().get('username')
+    todos = requests.get('https://jsonplaceholder.typicode.com/todos')
 
-    filename = '{}.csv'.format(userid)
-    with open(filename, mode='w') as employee_file:
-        employee_writer = csv.writer(employee_file,
-                                     delimiter=',',
-                                     quotechar='"',
-                                     quoting=csv.QUOTE_ALL)
-        for task in l_task:
-            employee_writer.writerow(task)
+    filename = userId + '.csv'
+    with open(filename, mode='w') as f:
+        writer = csv.writer(f, delimiter=',', quotechar='"',
+                            quoting=csv.QUOTE_ALL, lineterminator='\n')
+        for task in todos.json():
+            if task.get('userId') == int(userId):
+                writer.writerow([userId, name, str(task.get('completed')),
+                                 task.get('title')])
