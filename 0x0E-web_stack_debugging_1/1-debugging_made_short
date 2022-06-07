@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# configures nginx
-sed -i -e "s/8080/80/g" -e "s/ ipv6only=on//g" /etc/nginx/sites-enabled/default
-service nginx start
-pkill -o nginx
+# Command to make an nginx server listen on port 80, shorter version
+sed -i 's/8080/80/g' /etc/nginx/sites-enabled/default
+pkill -1 nginx
