@@ -1,26 +1,20 @@
-# 0x04-loops_conditions_and_parsing
+# 0x04. Loops, conditions and parsing
 
-## Learning Objectives
-
-* At the end of this project, you are expected to be able to explain to anyone, without the help of Google:
-
-### General
-
-* How to create SSH keys
-* What is the advantage of using #!/usr/bin/env bash over #!/bin/bash
-* How to use while, until and for loops
-* How to use if, else, elif and case condition statements
-* How to use the cut command
-* What are files and other comparison operators, and how to use them
-
-## Requirements
-
-* Allowed editors: vi, vim, emacs
-* ll your files will be interpreted on Ubuntu 20.04 LTS
-* All your files should end with a new line
-* A README.md file, at the root of the folder of the project, is mandatory
-* All your Bash script files must be executable
-* You are not allowed to use awk
-* Your Bash script must pass Shellcheck (version 0.7.0) without any error
-* The first line of all your Bash scripts should be exactly #!/usr/bin/env bash
-* The second line of all your Bash scripts should be a comment explaining what is the script doing
+## Table of contents
+Files | Description
+----- | -----------
+[0-RSA_public_key.pub](./0-RSA_public_key.pub) | Public key for RSA key pair
+[1-for_holberton_school](./1-for_holberton_school) | Bash script that displays Holberton School 10 times
+[2-while_holberton_school](./2-while_holberton_school) | Bash script that displays Holberton School 10 times
+[3-until_holberton_school](./3-until_holberton_school) | Bash script that displays Holberton School 10 times
+[4-if_9_say_hi](./4-if_9_say_hi) | Bash script that displays Holberton School 10 times, but for the 9th iteration, displays Holberton School and then Hi on a new line
+[5-4_bad_luck_8_is_your_chance](./5-4_bad_luck_8_is_your_chance) | Bash script that loops from 1 to 10
+[6-superstitious_numbers](./6-superstitious_numbers) | Bash script that displays numbers from 1 to 20
+[7-clock](./7-clock) | Bash script that displays the time for 12 hours and 59 minutes
+[8-for_ls](./8-for_ls) | Bash script that displays The content of the current directory, In a list format, Where only the part of the name after the first dash is displayed
+[9-to_file_or_not_to_file](./9-to_file_or_not_to_file) | Bash script that gives you information about the holbertonschool file
+[10-fizzbuzz](./10-fizzbuzz) | Bash script that displays numbers from 1 to 100
+[100-read_and_cut](./100-read_and_cut) | Bash script that displays username, user id and home directory for each line of /etc/passwd
+[101-tell_the_story_of_passwd](./101-tell_the_story_of_passwd) | Bash script that displays a story with each line of /etc/passwd
+[102-lets_parse_apache_logs](./102-lets_parse_apache_logs) | Bash scripts that parses an Apache log file and displays the IP and HTTP code for each visitor
+[103-dig_the-data](./103-dig_the-data) | Bash script that parses an Apache log file and displays the IP and HTTP code for each visitor, along with the number of occurences
