@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
-# displays all active IPv4 IPs on the machine it’s executed on
-ifconfig | awk -F "[: ]+" '/inet addr:/ { print $4 }'
+# displays all active IPv4 IPs
+apt-get -y install net-tools > /dev/null
+ifconfig | grep '[[:digit:]]*\.[[:digit:]]*\.[[:digit:]]*\.[[:digit:]]*' -o
