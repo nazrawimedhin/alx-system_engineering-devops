@@ -1,23 +1,19 @@
 #!/usr/bin/python3
-"""Exports data in the CSV format"""
+""" Records all tasks owned by employee."""
+import csv
+from sys import argv
 
-if __name__ == "__main__":
+import requests
 
-    import csv
-    import requests
-    import sys
+if __name__ == '__main__':
+    url = 'https://jsonplaceholder.typicode.com/'
+    user_id = argv[1]
+    employee = requests.get(url + 'users/{}'.format(user_id)).json()
+    todos = requests.get(url + 'todos?userId={}'.format(user_id)).json()
 
-    userId = sys.argv[1]
-    user = requests.get("https://jsonplaceholder.typicode.com/users/{}"
-                        .format(userId))
-    name = user.json().get('username')
-    todos = requests.get('https://jsonplaceholder.typicode.com/todos')
-
-    filename = userId + '.csv'
-    with open(filename, mode='w') as f:
-        writer = csv.writer(f, delimiter=',', quotechar='"',
-                            quoting=csv.QUOTE_ALL, lineterminator='\n')
-        for task in todos.json():
-            if task.get('userId') == int(userId):
-                writer.writerow([userId, name, str(task.get('completed')),
-                                 task.get('title')])
+    with open(user_id + '.csv', 'w', newline='') as file:
+        csv_writer = csv.writer(file, quoting=csv.QUOTE_ALL)
+        for todo in todos:
+            row = [employee.get('id'), employee.get('username'),
+                   todo.get('completed'), todo.get('title')]
+            csv_writer.writerow(row)

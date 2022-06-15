@@ -1,29 +1,21 @@
 #!/usr/bin/python3
-"""Exports data in the JSON format"""
+#!/usr/bin/python3
+""" Records all tasks owned by employee to JSON file."""
+import json
+from sys import argv
 
-if __name__ == "__main__":
+import requests
 
-    import json
-    import requests
-    import sys
-
-    userId = sys.argv[1]
-    user = requests.get("https://jsonplaceholder.typicode.com/users/{}"
-                        .format(userId))
-    todos = requests.get('https://jsonplaceholder.typicode.com/todos')
-    todos = todos.json()
-
-    todoUser = {}
-    taskList = []
-
-    for task in todos:
-        if task.get('userId') == int(userId):
-            taskDict = {"task": task.get('title'),
-                        "completed": task.get('completed'),
-                        "username": user.json().get('username')}
-            taskList.append(taskDict)
-    todoUser[userId] = taskList
-
-    filename = userId + '.json'
-    with open(filename, mode='w') as f:
-        json.dump(todoUser, f)
+if __name__ == '__main__':
+    url = 'https://jsonplaceholder.typicode.com/'
+    user_id = argv[1]
+    employee = requests.get(url + 'users/{}'.format(user_id)).json()
+    todos = requests.get(url + 'todos?userId={}'.format(user_id)).json()
+    res = {}
+    res[user_id] = []
+    for todo in todos:
+        row = {'task': todo.get('title'), 'completed': todo.get('completed'),
+               'username': employee.get('username')}
+        res[user_id].append(row)
+    with open(user_id + '.json', 'w') as file:
+        json.dump(res, file)
