@@ -1,19 +1,34 @@
 #!/usr/bin/python3
-""" Records all tasks owned by employee."""
+""" Script that uses JSONPlaceholder API to get information about employee """
 import csv
-from sys import argv
-
 import requests
+import sys
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     url = 'https://jsonplaceholder.typicode.com/'
-    user_id = argv[1]
-    employee = requests.get(url + 'users/{}'.format(user_id)).json()
-    todos = requests.get(url + 'todos?userId={}'.format(user_id)).json()
 
-    with open(user_id + '.csv', 'w', newline='') as file:
-        csv_writer = csv.writer(file, quoting=csv.QUOTE_ALL)
-        for todo in todos:
-            row = [employee.get('id'), employee.get('username'),
-                   todo.get('completed'), todo.get('title')]
-            csv_writer.writerow(row)
+    userid = sys.argv[1]
+    user = '{}users/{}'.format(url, userid)
+    res = requests.get(user)
+    json_o = res.json()
+    name = json_o.get('username')
+
+    todos = '{}todos?userId={}'.format(url, userid)
+    res = requests.get(todos)
+    tasks = res.json()
+    l_task = []
+    for task in tasks:
+        l_task.append([userid,
+                       name,
+                       task.get('completed'),
+                       task.get('title')])
+
+    filename = '{}.csv'.format(userid)
+    with open(filename, mode='w') as employee_file:
+        employee_writer = csv.writer(employee_file,
+                                     delimiter=',',
+                                     quotechar='"',
+                                     quoting=csv.QUOTE_ALL)
+        for task in l_task:
+            employee_writer.writerow(task)
