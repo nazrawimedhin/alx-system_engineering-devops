@@ -1,47 +1,42 @@
 #!/usr/bin/python3
-"""Module for task 3"""
+"""contains a function that parses the title of all hot articles,
+and prints a sorted count of given keywords"""
+import requests
 
 
-def count_words(subreddit, word_list, word_count={}, after=None):
-    """Queries the Reddit API and returns the count of words in
-    word_list in the titles of all the hot posts
-    of the subreddit"""
-    import requests
+def recurse(subreddit, hot_list=[], after=''):
+    """returns top tens"""
+    headers = {
+        'User-agent': 'cli:api_advanced:v1.0.0 (by /u/dereje77'
+    }
+    if after is None:
+        return hot_list
 
-    sub_info = requests.get("https://www.reddit.com/r/{}/hot.json"
-                            .format(subreddit),
-                            params={"after": after},
-                            headers={"User-Agent": "My-User-Agent"},
-                            allow_redirects=False)
-    if sub_info.status_code != 200:
+    r = requests.get('https://www.reddit.com/r/{}/hot.json'.format(subreddit),
+                     params={'limit': 100, 'after': after},
+                     headers=headers,
+                     allow_redirects=False)
+    if r.status_code != 200:
         return None
+    json = r.json()
+    for post in json['data']['children']:
+        hot_list.append(post['data']['title'])
+    return recurse(subreddit, hot_list, json['data']['after'])
 
-    info = sub_info.json()
 
-    hot_l = [child.get("data").get("title")
-             for child in info
-             .get("data")
-             .get("children")]
-    if not hot_l:
-        return None
-
-    word_list = list(dict.fromkeys(word_list))
-
-    if word_count == {}:
-        word_count = {word: 0 for word in word_list}
-
-    for title in hot_l:
-        split_words = title.split(' ')
+def count_words(subreddit, word_list):
+    """parses the title of all hot articles, and prints a sorted count
+    of given keywords"""
+    word_list = list(map(str.lower, word_list))
+    result = {}
+    titles = recurse(subreddit)
+    for title in titles:
         for word in word_list:
-            for s_word in split_words:
-                if s_word.lower() == word.lower():
-                    word_count[word] += 1
-
-    if not info.get("data").get("after"):
-        sorted_counts = sorted(word_count.items(), key=lambda kv: kv[0])
-        sorted_counts = sorted(word_count.items(),
-                               key=lambda kv: kv[1], reverse=True)
-        [print('{}: {}'.format(k, v)) for k, v in sorted_counts if v != 0]
-    else:
-        return count_words(subreddit, word_list, word_count,
-                           info.get("data").get("after"))
+            if word in title:
+                if result.get(word) is None:
+                    result[word] = 0
+                result[word] += 1
+    result = [(k, v) for k, v in result.items()]
+    result.sort(key=lambda x: x[1], reverse=True)
+    for k, v in result:
+        print('{}: {}'.format(k, v))
