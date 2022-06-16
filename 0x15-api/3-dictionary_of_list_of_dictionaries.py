@@ -1,27 +1,37 @@
 #!/usr/bin/python3
-"""Exports data in the JSON format"""
+"""
+Script returns information about TODO list for all users
+also exporting data in the json format
+"""
+import csv
+import json
+import requests
+import sys
+
 
 if __name__ == "__main__":
+    try:
+        api_url = 'https://jsonplaceholder.typicode.com'
 
-    import json
-    import requests
-    import sys
+        users = requests.get(
+            '{}/users'.format(api_url))
 
-    users = requests.get("https://jsonplaceholder.typicode.com/users")
-    users = users.json()
-    todos = requests.get('https://jsonplaceholder.typicode.com/todos')
-    todos = todos.json()
-    todoAll = {}
+        json_all = {}
+        for user in users.json():
+            user_id = user.get('id')
+            name = user.get('username')
 
-    for user in users:
-        taskList = []
-        for task in todos:
-            if task.get('userId') == user.get('id'):
-                taskDict = {"username": user.get('username'),
-                            "task": task.get('title'),
-                            "completed": task.get('completed')}
-                taskList.append(taskDict)
-        todoAll[user.get('id')] = taskList
+            todos = requests.get(
+                '{}/todos?userId={}'.format(api_url, user_id))
 
-    with open('todo_all_employees.json', mode='w') as f:
-        json.dump(todoAll, f)
+            task_list = []
+            for i in todos.json():
+                task_list.append({
+                        'username': name,
+                        'completed': i.get('completed'),
+                        'task': i.get('title')})
+            json_all["{}".format(user_id)] = task_list
+        with open('todo_all_employees.json', mode='w') as f:
+            json.dump(json_all, f)
+    except:
+        pass
