@@ -1,23 +1,29 @@
 #!/usr/bin/python3
-"""Exports data in the CSV format"""
+'''Module 1-export_to_CSV
+Exports data got from API to CSV'''
+import csv
+import requests
+from sys import argv
 
-if __name__ == "__main__":
 
-    import csv
-    import requests
-    import sys
+def main():
+    '''Program starts here'''
+    data = []
+    user_id = argv[1]
+    user_name = requests.get(
+        'https://jsonplaceholder.typicode.com/users/' +
+        user_id).json().get('username')
+    all_tasks = requests.get(
+        'https://jsonplaceholder.typicode.com/todos',
+        params={'userId': user_id}).json()
+    for i in all_tasks:
+        data.append([user_id, user_name,
+                    i['completed'], i['title']])
 
-    userId = sys.argv[1]
-    user = requests.get("https://jsonplaceholder.typicode.com/users/{}"
-                        .format(userId))
-    name = user.json().get('username')
-    todos = requests.get('https://jsonplaceholder.typicode.com/todos')
+    with open(user_id + '.csv', 'w') as f:
+        writer = csv.writer(f, quoting=csv.QUOTE_ALL)
+        writer.writerows(data)
 
-    filename = userId + '.csv'
-    with open(filename, mode='w') as f:
-        writer = csv.writer(f, delimiter=',', quotechar='"',
-                            quoting=csv.QUOTE_ALL, lineterminator='\n')
-        for task in todos.json():
-            if task.get('userId') == int(userId):
-                writer.writerow([userId, name, str(task.get('completed')),
-                                 task.get('title')])
+
+if __name__ == '__main__':
+    main()

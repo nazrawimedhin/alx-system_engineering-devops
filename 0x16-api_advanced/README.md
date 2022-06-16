@@ -1,11 +1,9 @@
-# 0x16. API advanced
+# Project 0x16. API advanced
 
-## Description
-This project focuses on making recursive requests to an API, how to use an API with pagination and how to read API documentation to find the endpoints we’re looking for.
+## Learning Objectives
 
-## Table of contents
-Files | Description
------ | -----------
-[0-subs.py](./0-subs.py) | Python function that queries the Reddit API and returns the number of subscribers (not active users, total subscribers) for a given subreddit
-[1-top_ten.py](./1-top_ten.py) | Python function that queries the Reddit API and prints the titles of the first 10 hot posts listed for a given subreddit
-[2-recurse.py](./2-recurse.py) | Python recursive function that queries the Reddit API and returns a list containing the titles of all hot articles for a given subreddit
+* How to read API documentation to find the endpoints you’re looking for
+* How to use an API with pagination
+* How to parse JSON results from an API
+* How to make a recursive API call
+* How to sort a dictionary by value
