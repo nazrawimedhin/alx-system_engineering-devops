@@ -1,20 +1,33 @@
 #!/usr/bin/python3
-"""Module that returns information
-    about his/her todo list progress.
-    """
+"""
+place holder
+"""
 
-import requests
-from sys import argv
 
 if __name__ == "__main__":
-    url = "https://jsonplaceholder.typicode.com/"
-    user = requests.get(url + "users/" + argv[1]).json()
-    todos = requests.get(url + "todos", params={"userId": argv[1]}).json()
-    cp_tasks = []
-    for tasks in todos:
-        if tasks["completed"] is True:
-            cp_tasks.append(tasks["title"])
-    print("Employee {} is done with tasks({}/{}):".format(
-        user["name"], len(cp_tasks), len(todos)))
-    for task in cp_tasks:
-        print("\t {}".format(task))
+
+    import requests
+    from sys import argv
+    if len(argv) < 2:
+        exit()
+    todos = requests.get(
+        "https://jsonplaceholder.typicode.com/todos?userId={}&completed=true"
+        .format(argv[1]))
+    name = requests.get(
+        "https://jsonplaceholder.typicode.com/users?id={}"
+        .format(argv[1]))
+    name = name.json()
+    name = name[0]["name"]
+    todo = requests.get(
+        "https://jsonplaceholder.typicode.com/todos?userId={}".format(argv[1]))
+    todo = todo.json()
+    todo = len(todo)
+    todos = todos.json()
+    todo_list = []
+
+    for x in todos:
+        todo_list.append("\t {}".format(x["title"]))
+    print("Employee {} is done with tasks({}/{}):"
+          .format(name, len(todos), todo))
+    for y in todo_list:
+        print(y)
