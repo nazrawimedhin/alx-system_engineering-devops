@@ -1,37 +1,27 @@
 #!/usr/bin/python3
-'''Module 3-dictionary_of_list_of_dictionaries
-Exports all users from the API to JSON file
-'''
-import json
-import requests
-from sys import argv
+"""Exports data in the JSON format"""
 
+if __name__ == "__main__":
 
-def main():
-    '''Program starts here'''
-    all_users = requests.get(
-        'https://jsonplaceholder.typicode.com/users').json()
-    data = {}
-    for i in all_users:
-        user_id = i['id']
-        data[user_id] = []
-        username = requests.get(
-            'https://jsonplaceholder.typicode.com/users/' +
-            str(user_id)).json().get('username')
-        all_tasks = requests.get(
-            'https://jsonplaceholder.typicode.com/todos',
-            params={'userId': user_id}).json()
+    import json
+    import requests
+    import sys
 
-        for i in all_tasks:
-            data[user_id].append(
-                {"username": username,
-                 "task": i['title'],
-                 "completed": i['completed']
-                 })
+    users = requests.get("https://jsonplaceholder.typicode.com/users")
+    users = users.json()
+    todos = requests.get('https://jsonplaceholder.typicode.com/todos')
+    todos = todos.json()
+    todoAll = {}
 
-        with open('todo_all_employees.json', 'w') as f:
-            json.dump(data, f)
+    for user in users:
+        taskList = []
+        for task in todos:
+            if task.get('userId') == user.get('id'):
+                taskDict = {"username": user.get('username'),
+                            "task": task.get('title'),
+                            "completed": task.get('completed')}
+                taskList.append(taskDict)
+        todoAll[user.get('id')] = taskList
 
-
-if __name__ == '__main__':
-    main()
+    with open('todo_all_employees.json', mode='w') as f:
+        json.dump(todoAll, f)
