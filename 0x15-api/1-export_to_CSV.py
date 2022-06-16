@@ -1,31 +1,22 @@
 #!/usr/bin/python3
 """
-Script returns information about TODO list for a given employee
-also exporting data in the CSV format
+Uses https://jsonplaceholder.typicode.com along with an employee ID to
+return information about the employee's todo list progress
 """
+
 import csv
 import requests
-import sys
+from sys import argv
 
-
-if __name__ == "__main__":
-    try:
-        employee_id = int(sys.argv[1])
-        api_url = 'https://jsonplaceholder.typicode.com'
-        users = requests.get(
-            '{}/users/{}'.format(api_url, employee_id))
-        name = users.json().get('username')
-        todos = requests.get(
-            '{}/todos?userId={}'.format(api_url, employee_id))
-        with open('{}.csv'.format(employee_id), mode='w') as f:
-            fieldnames = ['id', 'username', 'completed', 'title']
-            writer = csv.DictWriter(
-                f, fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
-            for i in todos.json():
-                writer.writerow({
-                        'id': employee_id,
-                        'username': name,
-                        'completed': i.get('completed'),
-                        'title': i.get('title')})
-    except:
-        pass
+if __name__ == '__main__':
+    userId = argv[1]
+    user = requests.get("https://jsonplaceholder.typicode.com/users/{}".
+                        format(userId), verify=False).json()
+    todo = requests.get("https://jsonplaceholder.typicode.com/todos?userId={}".
+                        format(userId), verify=False).json()
+    with open("{}.csv".format(userId), 'w', newline='') as csvfile:
+        taskwriter = csv.writer(csvfile, quoting=csv.QUOTE_ALL)
+        for task in todo:
+            taskwriter.writerow([int(userId), user.get('username'),
+                                 task.get('completed'),
+                                 task.get('title')])
